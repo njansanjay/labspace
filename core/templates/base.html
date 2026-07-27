@@ -1,0 +1,105 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en" data-bs-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}LabSpace{% endblock %}</title>
+
+    <!-- Inter Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet">
+
+    <!-- Custom Minimal CSS -->
+    <link href="{% static 'css/style.css' %}" rel="stylesheet">
+
+    {% block css %}{% endblock %}
+</head>
+
+<body>
+
+    <!-- Minimal Header -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-custom py-2 border-bottom">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center gap-2 brand-minimal fs-5" href="{% url 'home' %}">
+                <i class="bi bi-box-seam text-secondary fs-5"></i>
+                <span>LabSpace</span>
+            </a>
+            
+            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav ms-auto align-items-center gap-2 mt-3 mt-lg-0">
+                    {% if request.session.space_id %}
+                        <li class="nav-item me-2">
+                            <span class="badge-minimal">
+                                Room: <strong class="text-white">{{ request.session.space_id }}</strong>
+                            </span>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'dashboard' space_id=request.session.space_id %}" class="btn btn-minimal-secondary btn-sm">
+                                Dashboard
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'exit_space' %}" class="btn btn-minimal-outline btn-sm text-secondary">
+                                Exit
+                            </a>
+                        </li>
+                    {% else %}
+                        <li class="nav-item">
+                            <a href="{% url 'open_space' %}" class="btn btn-minimal-outline btn-sm px-3">
+                                Join Space
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="{% url 'create_space' %}" class="btn btn-minimal btn-sm px-3">
+                                Create Space
+                            </a>
+                        </li>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Alerts -->
+    {% if messages %}
+        <div class="toast-container">
+            {% for message in messages %}
+                <div class="alert alert-minimal alert-dismissible fade show d-flex align-items-center gap-2 mb-2 p-3" role="alert">
+                    <span class="small">{{ message }}</span>
+                    <button type="button" class="btn-close btn-close-white ms-auto" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Content -->
+    <main class="flex-grow-1 py-4">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="py-3 mt-auto border-top border-dark border-opacity-50 text-center text-muted fs-7">
+        <div class="container">
+            <p class="mb-0 text-secondary opacity-50 small">&copy; {% now "Y" %} LabSpace. Minimal storage space.</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    {% block js %}{% endblock %}
+</body>
+</html>
+
